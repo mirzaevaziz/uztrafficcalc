@@ -1,10 +1,16 @@
-import requests
+"""
+
+Calculates Sarkor Internet Provider approx. traffic per day use
+If you have unlim unlim then you don't need it
+
+"""
+
 from datetime import date, datetime
-from requests import Session
+
+import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from robobrowser import RoboBrowser
 from tabulate import tabulate
-
 
 
 def calc(last_date, rest_traffic):
@@ -17,13 +23,20 @@ def calc(last_date, rest_traffic):
     """
     now = date.today()
 
-    print('Approx. traffic per day = ', rest_traffic / (last_date - now).days)
+    print('Примерный расход по днямру-2414680 = ', rest_traffic / (last_date - now).days)
 
     return rest_traffic / (last_date - now).days
 
 
 def main():
-    session = Session()
+    """
+    Getting approx. traffic ped day use from Sarkor's billing web application
+    Reqires login and password for enter user's cabinet
+
+    :return: Approx. traffic ped day use from Sarkor's billing web application
+    """
+
+    session = requests.Session()
     session.verify = False
 
     browser = RoboBrowser(session=session, history=True, parser="html.parser")
@@ -44,15 +57,17 @@ def main():
         main()
         return
 
-    print("Plan: {0}\nMoney: {1}\nNext Date: {2}".format(values[0].text, values[1].text, values[2].text))
+    print("\nТарифный план: {0}\nОстаток на счетe: ${1}\nСледующее списание: {2}".format(values[0].text
+                                                                                         , values[1].text
+                                                                                         , values[2].text))
 
     dt = datetime.strptime(values[2].text, "%d.%m.%Y").date()
 
     # getting limits
-    print("\nLimits\n")
+    print("\nЛимиты\n")
     rows = browser.select('#contractRightColumn > #cLimitsTable > table > tr')
 
-    print(tabulate([[v.text.replace("–", "-")for v in r.select('td')] for r in rows[1:]],
+    print(tabulate([[v.text.replace("–", "-") for v in r.select('td')] for r in rows[1:]],
                    headers=[r.text.replace("–", "-") for r in rows[0].select('th')]))
 
     rest = float(rows[1].select('td')[5].text[:-3])
@@ -60,11 +75,13 @@ def main():
     if rest == 0:
         rest = float(rows[2].select('td')[5].text[:-3])
 
-    calc(dt, rest)
-
-    input("Press Enter to exit...")
+    return calc(dt, rest)
 
 
 if __name__ == "__main__":
-    requests.packages.urllib3.disable_warnings(InsecureRequestWarning) # Silent InsecureRequestWarning (Switch off ssl warning)
+    requests.packages.urllib3.disable_warnings(
+        InsecureRequestWarning)  # Silent InsecureRequestWarning (Switch off ssl warning)
+
     main()
+
+    input("Press Enter to exit...")
