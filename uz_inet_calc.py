@@ -141,7 +141,7 @@ def main():
     while not provider.login(input("login: "), input("password: ")):
         print("Login or password incorrect.")
 
-    provider.get_values()
+    provider.set_values()
 
     provider.print()
 
