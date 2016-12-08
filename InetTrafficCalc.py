@@ -1,8 +1,10 @@
+import requests
 from datetime import date, datetime
-
 from requests import Session
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from robobrowser import RoboBrowser
 from tabulate import tabulate
+
 
 
 def calc(last_date, rest_traffic):
@@ -64,4 +66,5 @@ def main():
 
 
 if __name__ == "__main__":
+    requests.packages.urllib3.disable_warnings(InsecureRequestWarning) # Silent InsecureRequestWarning (Switch off ssl warning)
     main()
