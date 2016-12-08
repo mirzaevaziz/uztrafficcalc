@@ -23,7 +23,7 @@ def calc(last_date, rest_traffic):
     """
     now = date.today()
 
-    print('Примерный расход по днямру-2414680 = ', rest_traffic / (last_date - now).days)
+    print('Примерный расход по дням = ', rest_traffic / (last_date - now).days)
 
     return rest_traffic / (last_date - now).days
 
