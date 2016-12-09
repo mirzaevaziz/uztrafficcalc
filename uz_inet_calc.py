@@ -5,6 +5,7 @@ If you have unlim unlim then you don't need it
 
 """
 import traceback
+import sys
 from datetime import date, datetime
 
 import requests
@@ -164,6 +165,9 @@ if __name__ == "__main__":
     # noinspection PyBroadException
     try:
         main()
+    except KeyboardInterrupt:
+        print("\nExecuting SIGINT (Ctrl - C)\n")
+        sys.exit(0)
     except:
         print(traceback.format_exc())
 
