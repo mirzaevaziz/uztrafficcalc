@@ -1,7 +1,7 @@
 from datetime import datetime
 import requests
 from robobrowser import RoboBrowser
-from uz_inet_traffic_calc.providers.Provider import Provider
+from .provider import Provider
 
 
 # Silent InsecureRequestWarning (Switch off ssl warning)
