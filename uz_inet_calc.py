@@ -4,7 +4,7 @@ Calculates Internet Provider approx. traffic per day use
 If you have unlim unlim then you don't need it
 
 """
-
+import traceback
 from datetime import date, datetime
 
 import requests
@@ -161,9 +161,10 @@ def main():
 
 if __name__ == "__main__":
 
+    # noinspection PyBroadException
     try:
         main()
-    except Exception as ex:
-        print(ex)
+    except:
+        print(traceback.format_exc())
 
     input("Press Enter to exit...")
