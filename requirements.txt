@@ -4,3 +4,4 @@ robobrowser==0.5.3
 six==1.10.0
 tabulate==0.7.7
 Werkzeug==0.11.11
+pytest==3.0.5
