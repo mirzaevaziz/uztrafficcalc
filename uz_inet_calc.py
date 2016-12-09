@@ -1,6 +1,6 @@
 """
 
-Calculates Sarkor Internet Provider approx. traffic per day use
+Calculates Internet Provider approx. traffic per day use
 If you have unlim unlim then you don't need it
 
 """
@@ -17,7 +17,9 @@ class Provider:
     """
     Base class of internet providers
     """
+
     def __init__(self):
+        self._provider_name = None
         self._budget = 0
         self._tariff_plan = None
         self._payment_date = None
@@ -48,15 +50,40 @@ class Provider:
 
         :returns Approx. traffic ped day used
         """
+
         now = date.today()
 
         self._past_used_traffic = (self._all_traffic - self._rest_traffic) / (now - self._payment_date).days
+
+    def print(self):
+        """
+        Prints current object
+        """
+
+        print("\nПровайдер: {}".format(self._provider_name))
+
+        print("Тарифный план: {0}\nОстаток на счетe: ${1}\nСледующее списание: {2}".format(self._tariff_plan,
+                                                                                           self._budget,
+                                                                                           self._next_payment_date))
+        # getting limits
+        print("\nЛимиты\n")
+
+        print(tabulate(self._dashboard_table_rows[1:],
+                       headers=self._dashboard_table_rows[0]))
+
+        print("Использован в день {0:.2f} Мб".format(self._past_used_traffic))
+        print("Можно использовать в день {0:.2f} Мб\n".format(self._future_use_traffic))
 
 
 class Sarkor(Provider):
     """
     Sarkor Telecome internet provider class
     """
+
+    def __init__(self):
+        super(Sarkor, self).__init__()
+        self._provider_name = 'Sarkor Telecom'
+
     def login(self, login, password):
         """
         Logins to user's private cabinet
@@ -91,41 +118,27 @@ class Sarkor(Provider):
         self._tariff_plan = values[0].text
         self._next_payment_date = datetime.strptime(values[2].text, "%d.%m.%Y").date()
 
-        self._dashboard_table_rows = self.browser.select('#contractRightColumn > #cLimitsTable > table > tr')
+        _ = self.browser.select('#contractRightColumn > #cLimitsTable > table > tr')
 
-        if len(self._dashboard_table_rows) == 0:
+        if len(_) == 0:
             raise ValueError(
                 "Couldn't find Limits table rows with exp ''#contractRightColumn > #cLimitsTable > table > tr'")
 
-        _ = self._dashboard_table_rows[1].select('td')
-        self._rest_traffic = float(_[5].text[:-3])
-        self._all_traffic = float(_[2].text[:-3])
-        self._payment_date = datetime.strptime(_[6].text, "%d.%m.%Y").date()
+        self._dashboard_table_rows = [[r.text.replace("–", "-") for r in _[0].select('th')]]
+        self._dashboard_table_rows += [[v.text.replace("–", "-") for v in r.select('td')] for r in _[1:]]
 
-        if self._rest_traffic == 0:
-            _ = self._dashboard_table_rows[2].select('td')
-            self._rest_traffic = float(_[5].text[:-3])
-            self._all_traffic = float(_[2].text[:-3])
-            self._payment_date = datetime.strptime(_[6].text, "%d.%m.%Y").date()
+        self._rest_traffic = 0
+        self._all_traffic = 0
+
+        for row in self._dashboard_table_rows[1:]:
+            self._rest_traffic = float(row[5][:-3])
+            self._all_traffic += float(row[2][:-3])
+            self._payment_date = datetime.strptime(row[6], "%d.%m.%Y").date()
+            if row[9] == 'Нет':
+                break
 
         self.calc_future_use_traffic()
         self.calc_past_used_traffic()
-
-    def print(self):
-        """
-        Prints current object
-        """
-        print("\nТарифный план: {0}\nОстаток на счетe: ${1}\nСледующее списание: {2}".format(self._tariff_plan,
-                                                                                             self._budget,
-                                                                                             self._next_payment_date))
-        # getting limits
-        print("\nЛимиты\n")
-
-        print(tabulate([[v.text.replace("–", "-") for v in r.select('td')] for r in self._dashboard_table_rows[1:]],
-                       headers=[r.text.replace("–", "-") for r in self._dashboard_table_rows[0].select('th')]))
-
-        print("Использован в день {0:.2f} Мб".format(self._past_used_traffic))
-        print("Можно использовать в день {0:.2f} Мб\n".format(self._future_use_traffic))
 
 
 def main():
@@ -148,6 +161,9 @@ def main():
 
 if __name__ == "__main__":
 
-    main()
+    try:
+        main()
+    except Exception as ex:
+        print(ex)
 
     input("Press Enter to exit...")
