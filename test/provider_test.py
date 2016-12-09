@@ -1,6 +1,6 @@
 from datetime import date, timedelta
+from trafficcalc.providers.provider import Provider
 
-from uz_inet_traffic_calc.providers.Provider import Provider
 
 
 def test_provider_calc_future_use_traffic():

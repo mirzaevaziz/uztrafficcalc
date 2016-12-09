@@ -10,7 +10,7 @@ import sys
 import requests
 from pip import InsecureRequestWarning
 
-from uz_inet_traffic_calc.providers.Sarkor import Sarkor
+from trafficcalc.providers.sarkor import Sarkor
 
 
 def main():
