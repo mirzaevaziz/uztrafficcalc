@@ -4,14 +4,10 @@ Calculates Internet Provider approx. traffic per day use
 If you have unlim unlim then you don't need it
 
 """
-import traceback
 import sys
+import traceback
 
-import requests
-from pip import InsecureRequestWarning
-
-from trafficcalc.providers.sarkor import Sarkor
-
+from uztrafficcalc.providers.sarkor import Sarkor
 
 def main():
     """

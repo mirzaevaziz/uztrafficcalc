@@ -1,5 +1,5 @@
 from datetime import date, timedelta
-from trafficcalc.providers.provider import Provider
+from uztrafficcalc.providers.provider import Provider
 
 
 
