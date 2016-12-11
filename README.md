@@ -6,7 +6,7 @@
 
 Agar siz internet foydalanuvchisi bo'lsangiz va sizda Cheksiz(Unlim) tarifi bo'lmasa, mazkur skript kunlik ishlatilgan MB miqdori hamda yana kun davomida qancha ishlatishingiz mumkinligini ko'rsatadi
 
-![alt tag](https://github.com/mirzaevaziz/uz_inet_traffic_calc/blob/master/Sarkor_calc_screen.png?raw=true)
+![alt tag](https://github.com/mirzaevaziz/uz_inet_traffic_calc/blob/master/Screen.png?raw=true)
 
 ##### Qanday o'rnatish
     $ pip install -r requirements.txt 
