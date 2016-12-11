@@ -1,4 +1,4 @@
-# Калькулятор траффикаы для Узнета <br/> Uznet uchun Traffic kalkulator
+# Калькулятор траффика для Узнета <br/> Uznet uchun Traffic kalkulator
 [![Build Status](https://travis-ci.org/mirzaevaziz/uz_inet_traffic_calc.svg?branch=master)](https://travis-ci.org/mirzaevaziz/uz_inet_traffic_calc)
 
 Если Вы используете интернет и у Вас не Unlim план, то этот скрипт поможет Вам посчитать сколько траффика в день Вы можете истратить.
